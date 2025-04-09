@@ -15,6 +15,7 @@ class MidiumButton extends StatelessWidget {
         width: 243,
         height: 54,
         child: ElevatedButton(
+          key: const Key('medium_button'),
           onPressed: handleButtonClick,
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF129575),

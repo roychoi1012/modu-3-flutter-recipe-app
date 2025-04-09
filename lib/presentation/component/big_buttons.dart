@@ -15,6 +15,7 @@ class BigButton extends StatelessWidget {
         width: 315,
         height: 60,
         child: ElevatedButton(
+          key: const Key('big_button'),
           onPressed: _handleButtonClick,
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF129575),

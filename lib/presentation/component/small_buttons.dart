@@ -15,6 +15,7 @@ class SmallButton extends StatelessWidget {
         width: 174,
         height: 37,
         child: ElevatedButton(
+          key: const Key('small_button'),
           onPressed: handleButtonClick,
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF129575),
