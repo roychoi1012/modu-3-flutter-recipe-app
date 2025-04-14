@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/data/data_source/recipe_data_source_impl.dart';
 import 'package:recipe_app/data/repository/recipe_repository_impl.dart';
-import 'package:recipe_app/presentation/component/pages/recipe/saved_recipes_view_model.dart';
 import 'package:recipe_app/presentation/component/pages/search/search_recipes_screen.dart';
 import 'package:recipe_app/ui/color_style.dart';
 
@@ -10,10 +9,8 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // viewModel을 한 번 생성
-    final viewModel = SavedRecipesViewModel(
-      RecipeRepositoryImpl(RecipeDataSourceImpl()),
-    );
+    // repository 생성
+    final repository = RecipeRepositoryImpl(RecipeDataSourceImpl());
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -30,7 +27,7 @@ class MainScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => SearchRecipesScreen(viewModel: viewModel),
+                builder: (_) => SearchRecipesScreen(repository: repository),
               ),
             );
           },

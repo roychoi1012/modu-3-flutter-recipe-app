@@ -1,26 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:recipe_app/presentation/component/pages/recipe/saved_recipes_view_model.dart';
-import 'package:recipe_app/presentation/component/widgets/recipe_card.dart';
+import 'package:recipe_app/data/repository/recipe_repository.dart';
+import 'package:recipe_app/presentation/component/pages/filtter/filtter_screen_botton_sheet.dart';
+import 'package:recipe_app/presentation/component/pages/search/search_recipe_card.dart';
+import 'package:recipe_app/presentation/component/pages/search/search_recipes_view_model.dart';
 import 'package:recipe_app/presentation/component/widgets/text_field_widget.dart';
 import 'package:recipe_app/ui/app_text_styles.dart';
 import 'package:recipe_app/ui/color_style.dart';
 
 class SearchRecipesScreen extends StatefulWidget {
-  final SavedRecipesViewModel viewModel;
+  final RecipeRepository repository;
 
-  const SearchRecipesScreen({super.key, required this.viewModel});
+  const SearchRecipesScreen({super.key, required this.repository});
 
   @override
   State<SearchRecipesScreen> createState() => _SearchRecipesScreenState();
 }
 
 class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
-  late final SavedRecipesViewModel viewModel;
+  late final SearchRecipesViewModel viewModel;
+  Map<String, dynamic> currentFilters = {};
 
   @override
   void initState() {
     super.initState();
-    viewModel = widget.viewModel;
+    viewModel = SearchRecipesViewModel(widget.repository);
+  }
+
+  @override
+  void dispose() {
+    viewModel.dispose();
+    super.dispose();
+  }
+
+  void _showFilterBottomSheet() {
+    FilterSearchBottomSheet.show(
+      context,
+      onApplyFilter: (selectedFilters) {
+        setState(() {
+          currentFilters = selectedFilters;
+        });
+        // 여기서 선택된 필터로 검색 결과 업데이트 로직 추가
+        viewModel.applyFilters(selectedFilters);
+      },
+    );
   }
 
   @override
@@ -39,7 +61,7 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
           final state = viewModel.state;
 
           return Padding(
-            padding: const EdgeInsets.all(30),
+            padding: const EdgeInsets.all(20),
             child: Column(
               children: [
                 // 검색 입력 + 필터 버튼
@@ -55,20 +77,25 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
                         onChanged: viewModel.updateQuery,
                       ),
                     ),
-                    const SizedBox(width: 20),
+                    const SizedBox(width: 16),
                     SizedBox(
                       width: 40,
                       height: 40,
                       child: GestureDetector(
-                        onTap: () {
-                          print('필터 버튼 클릭됨');
-                        },
+                        onTap: _showFilterBottomSheet,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: ColorStyle.mainGreen,
+                            color:
+                                currentFilters.isNotEmpty
+                                    ? ColorStyle.mainGreen
+                                    : const Color(0xFF129575),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(Icons.tune, color: Colors.white, size: 20),
+                          child: const Icon(
+                            Icons.tune,
+                            color: Colors.white,
+                            size: 20,
+                          ),
                         ),
                       ),
                     ),
@@ -76,24 +103,100 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
                 ),
                 const SizedBox(height: 20),
 
+                // 현재 적용된 필터 표시 (옵션)
+                if (currentFilters.isNotEmpty)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        if (currentFilters.containsKey('time'))
+                          _buildFilterChip(
+                            label: 'Time: ${currentFilters['time']}',
+                            onRemove: () {
+                              setState(() {
+                                currentFilters.remove('time');
+                                viewModel.applyFilters(currentFilters);
+                              });
+                            },
+                          ),
+                        if (currentFilters.containsKey('rating'))
+                          _buildFilterChip(
+                            label: 'Rating: ${currentFilters['rating']}★',
+                            onRemove: () {
+                              setState(() {
+                                currentFilters.remove('rating');
+                                viewModel.applyFilters(currentFilters);
+                              });
+                            },
+                          ),
+                        if (currentFilters.containsKey('categories'))
+                          ...(currentFilters['categories'] as List<String>)
+                              .map(
+                                (category) => _buildFilterChip(
+                                  label: category,
+                                  onRemove: () {
+                                    setState(() {
+                                      (currentFilters['categories']
+                                              as List<String>)
+                                          .remove(category);
+                                      if ((currentFilters['categories']
+                                              as List<String>)
+                                          .isEmpty) {
+                                        currentFilters.remove('categories');
+                                      }
+                                      viewModel.applyFilters(currentFilters);
+                                    });
+                                  },
+                                ),
+                              )
+                              .toList(),
+                      ],
+                    ),
+                  ),
+                const SizedBox(height: 16),
+
+                // 검색 결과 상태 표시
+                if (!state.isLoading && state.searchQuery.isNotEmpty)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '${state.filteredRecipes.length}개의 "${state.searchQuery}" 검색결과',
+                      style: AppTextStyles.mediumBold(color: ColorStyle.gray4),
+                    ),
+                  ),
+
+                const SizedBox(height: 16),
+
                 // 로딩 / 결과 / 레시피 카드
                 if (state.isLoading)
-                  const Expanded(child: Center(child: CircularProgressIndicator()))
+                  const Expanded(
+                    child: Center(child: CircularProgressIndicator()),
+                  )
                 else if (state.filteredRecipes.isEmpty)
-                  const Expanded(child: Center(child: Text("레시피가 없습니다.")))
+                  const Expanded(
+                    child: Center(
+                      child: Text(
+                        "레시피가 없습니다.",
+                        style: TextStyle(fontSize: 16, color: ColorStyle.gray4),
+                      ),
+                    ),
+                  )
                 else
                   Expanded(
                     child: GridView.builder(
                       itemCount: state.filteredRecipes.length,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 20,
-                        mainAxisSpacing: 20,
-                        childAspectRatio: 1,
-                      ),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, // 2열 그리드
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                            childAspectRatio: 1, // 카드 비율 조정
+                          ),
                       itemBuilder: (context, index) {
                         final recipe = state.filteredRecipes[index];
-                        return RecipeCard(
+                        return SearchRecipeCard(
                           recipeName: recipe.name,
                           chefName: recipe.chef,
                           recipeImgUrl: recipe.image,
@@ -106,6 +209,27 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildFilterChip({
+    required String label,
+    required VoidCallback onRemove,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(label, style: const TextStyle(fontSize: 12)),
+          const SizedBox(width: 4),
+          InkWell(onTap: onRemove, child: const Icon(Icons.close, size: 14)),
+        ],
       ),
     );
   }
