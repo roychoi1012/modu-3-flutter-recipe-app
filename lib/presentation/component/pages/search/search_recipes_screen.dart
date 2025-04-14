@@ -101,7 +101,14 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    ' Search Recipe',
+                    style: AppTextStyles.mediumBold(color: Colors.black),
+                  ),
+                ),
 
                 // 현재 적용된 필터 표시 (옵션)
                 if (currentFilters.isNotEmpty)
