@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:recipe_app/data/repository/recipe_data_source.dart';
-import 'package:recipe_app/presentation/recipe/recipe_state.dart';
+import 'package:recipe_app/presentation/component/pages/recipe/recipe_state.dart';
 
 class SavedRecipesViewModel with ChangeNotifier {
   final RecipeRepository _repository;

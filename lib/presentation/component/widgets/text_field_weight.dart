@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TextFieldWidget extends StatelessWidget {
-  const TextFieldWidget({super.key});
+  final String hintText;
+
+  const TextFieldWidget({required this.hintText, super.key});
 
   Widget _buildLabeledField(String label, Widget textField) {
     return Row(
@@ -36,7 +38,7 @@ class TextFieldWidget extends StatelessWidget {
           autofocus: focus,
           child: TextField(
             decoration: InputDecoration(
-              hintText: 'Placeholder',
+              hintText: hintText,
               filled: filled,
               fillColor: filled ? const Color(0xFFF4F4F4) : null,
               border: OutlineInputBorder(
