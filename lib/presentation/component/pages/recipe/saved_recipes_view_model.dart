@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
-import 'package:recipe_app/data/repository/recipe_data_source.dart';
-import 'package:recipe_app/presentation/component/pages/recipe/recipe_state.dart';
+import 'package:recipe_app/data/repository/recipe_repository.dart';
+import 'package:recipe_app/presentation/component/pages/recipe/recipes_state.dart';
 
 class SavedRecipesViewModel with ChangeNotifier {
   final RecipeRepository _repository;
 
-  RecipeState _state = const RecipeState(isLoading: true);
-  RecipeState get state => _state;
+  RecipesState _state = const RecipesState(isLoading: true);
+  RecipesState get state => _state;
 
   SavedRecipesViewModel(this._repository) {
     _loadAllRecipes();
@@ -36,7 +36,7 @@ class SavedRecipesViewModel with ChangeNotifier {
     ));
   }
 
-  void _updateState(RecipeState newState) {
+  void _updateState(RecipesState newState) {
     _state = newState;
     notifyListeners();
   }

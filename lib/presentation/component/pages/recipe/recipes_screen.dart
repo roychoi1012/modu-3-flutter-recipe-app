@@ -3,9 +3,9 @@ import 'package:recipe_app/presentation/component/widgets/recipe_card.dart';
 import 'package:recipe_app/presentation/component/pages/recipe/saved_recipes_view_model.dart';
 import 'package:recipe_app/ui/app_text_styles.dart';
 
-class RecipeScreen extends StatelessWidget {
+class RecipesScreen extends StatelessWidget {
   final SavedRecipesViewModel viewModel;
-  const RecipeScreen({super.key, required this.viewModel});
+  const RecipesScreen({super.key, required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
