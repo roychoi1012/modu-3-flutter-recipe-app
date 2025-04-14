@@ -89,7 +89,7 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
                         crossAxisCount: 2,
                         crossAxisSpacing: 20,
                         mainAxisSpacing: 20,
-                        childAspectRatio: 0.75,
+                        childAspectRatio: 1,
                       ),
                       itemBuilder: (context, index) {
                         final recipe = state.filteredRecipes[index];
@@ -97,7 +97,6 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
                           recipeName: recipe.name,
                           chefName: recipe.chef,
                           recipeImgUrl: recipe.image,
-                          recipeTime: int.tryParse(recipe.time.replaceAll(RegExp(r'[^0-9]'), '')) ?? 20,
                           recipeRating: recipe.rating ?? 4.0,
                         );
                       },
