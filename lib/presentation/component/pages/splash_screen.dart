@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:recipe_app/data/data_source/recipe_data_source_impl.dart';
 import 'package:recipe_app/data/repository/recipe_data_source_impl.dart';
 import 'package:recipe_app/presentation/component/widgets/midium_button.dart';
-import 'package:recipe_app/presentation/home/recipe_screen.dart';
-import 'package:recipe_app/presentation/home/saved_recipes_view_model.dart';
+import 'package:recipe_app/presentation/recipe/recipe_screen.dart';
+import 'package:recipe_app/presentation/recipe/saved_recipes_view_model.dart';
 import 'package:recipe_app/ui/app_text_styles.dart';
-import 'package:recipe_app/ui/color_style.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -30,7 +29,7 @@ class SplashScreen extends StatelessWidget {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+                end: Alignment.bottomCenter,  
                 colors: [
                   Colors.black45,
                   Colors.black, // 아래로 내려갈수록 어두워짐
