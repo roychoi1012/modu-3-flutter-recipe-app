@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/data/data_source/recipe_data_source_impl.dart';
 import 'package:recipe_app/data/repository/recipe_repository_impl.dart';
-import 'package:recipe_app/presentation/component/pages/home/splash_screen.dart';
 import 'package:recipe_app/presentation/component/pages/home/main_screen.dart';
+import 'package:recipe_app/presentation/component/pages/home/splash_screen.dart';
 import 'package:recipe_app/presentation/component/pages/recipe/recipes_screen.dart';
 import 'package:recipe_app/presentation/component/pages/recipe/saved_recipes_view_model.dart';
+import 'package:recipe_app/presentation/component/pages/signIn/sign_in_screen.dart';
 import 'package:recipe_app/ui/color_style.dart';
 
 void main() {
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      // home: const SplashScreen(),    // 원본 값
+      home: const SignInScreen(),       // 테스트 수정 값
     );
   }
 }
