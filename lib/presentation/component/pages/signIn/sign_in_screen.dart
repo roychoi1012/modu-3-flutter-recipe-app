@@ -140,7 +140,7 @@ class SignInScreen extends StatelessWidget {
                 ],
               ),
 
-              SizedBox(height: 55),
+              SizedBox(height: 100),
 
               // 회원가입 유도
               Center(
