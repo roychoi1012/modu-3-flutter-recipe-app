@@ -55,7 +55,7 @@ class _BigButtonState extends State<BigButton> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '${widget.text}',
+                widget.text,
                 style: GoogleFonts.poppins(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,

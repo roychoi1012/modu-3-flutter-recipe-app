@@ -67,7 +67,15 @@ class SignInScreen extends StatelessWidget {
               const SizedBox(height: 24),
 
               // Sign In 버튼
-              BigButton(text: 'Sign In', onPressed: () {}),
+              BigButton(
+                text: 'Sign In',
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const MainScreen()),
+                  );
+                },
+              ),
 
               const SizedBox(height: 28),
 
