@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:recipe_app/presentation/component/pages/home/main_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:recipe_app/core/routing/router_path.dart';
 import 'package:recipe_app/presentation/component/pages/signUp/sign_up_screen.dart';
 import 'package:recipe_app/presentation/component/widgets/big_button.dart';
 import 'package:recipe_app/presentation/component/widgets/custom_text_field.dart';
@@ -70,10 +71,7 @@ class SignInScreen extends StatelessWidget {
               BigButton(
                 text: 'Sign In',
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const MainScreen()),
-                  );
+                  context.go(RouterPath.main); // go_router의 경로 사용
                 },
               ),
 
@@ -163,12 +161,7 @@ class SignInScreen extends StatelessWidget {
                         recognizer:
                             TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const SignUpScreen(),
-                                  ),
-                                );
+                                context.go(RouterPath.signUp);
                               },
                       ),
                     ],

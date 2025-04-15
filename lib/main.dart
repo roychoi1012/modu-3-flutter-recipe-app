@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_app/core/routing/router_path.dart';
 import 'package:recipe_app/data/data_source/recipe_data_source_impl.dart';
 import 'package:recipe_app/data/repository/recipe_repository_impl.dart';
 import 'package:recipe_app/presentation/component/pages/home/main_screen.dart';
@@ -17,10 +18,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      // home: const SplashScreen(),    // 원본 값
-      home: const SignInScreen(),       // 테스트 수정 값
+      routerConfig: router,    // 테스트 수정 값
     );
   }
 }

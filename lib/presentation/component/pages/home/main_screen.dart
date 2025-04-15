@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:recipe_app/core/routing/router_path.dart';
 import 'package:recipe_app/data/data_source/recipe_data_source_impl.dart';
 import 'package:recipe_app/data/repository/recipe_repository_impl.dart';
 import 'package:recipe_app/presentation/component/pages/search/search_recipes_screen.dart';
@@ -24,12 +26,7 @@ class MainScreen extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => SearchRecipesScreen(repository: repository),
-              ),
-            );
+            context.go(RouterPath.signIn);
           },
           child: const Text(
             '레시피 검색하기',

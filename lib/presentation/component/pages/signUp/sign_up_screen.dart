@@ -1,7 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:recipe_app/core/routing/router_path.dart';
 import 'package:recipe_app/presentation/component/pages/home/main_screen.dart';
-import 'package:recipe_app/presentation/component/pages/signIn/sign_in_screen.dart';
 import 'package:recipe_app/presentation/component/widgets/big_button.dart';
 import 'package:recipe_app/presentation/component/widgets/custom_text_field.dart';
 import 'package:recipe_app/ui/app_text_styles.dart';
@@ -108,10 +109,7 @@ class SignUpScreen extends StatelessWidget {
               BigButton(
                 text: 'Sign Up',
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const MainScreen()),
-                  );
+                  context.go(RouterPath.main);
                 },
               ),
               const SizedBox(height: 14),
@@ -199,12 +197,7 @@ class SignUpScreen extends StatelessWidget {
                         recognizer:
                             TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const SignInScreen(),
-                                  ),
-                                );
+                                context.go(RouterPath.signIn);
                               },
                       ),
                     ],
