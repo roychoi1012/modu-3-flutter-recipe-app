@@ -108,4 +108,12 @@ abstract class AppTextStyles {
     height: 16 / 11,
     color: color,
   );
+
+
+static TextStyle signsize({Color? color}) => GoogleFonts.poppins(
+    fontWeight: FontWeight.w500,
+    fontSize: 11,
+    height: 16 / 11,
+    color: color,
+  );
 }

@@ -60,7 +60,7 @@ class SignInScreen extends StatelessWidget {
                 child: Text(
                   '   Forgot Password?',
                   style: AppTextStyles.extraSmallRegular(
-                    color: Color(0xFFFF9C00),
+                    color: ColorStyle.orange,
                   ),
                 ),
               ),
@@ -76,11 +76,11 @@ class SignInScreen extends StatelessWidget {
                 children: [
                   const SizedBox(width: 90), // 좌측 여백
                   const Expanded(child: Divider(thickness: 1)),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
                       'Or Sign in With',
-                      style: TextStyle(color: Colors.grey),
+                      style: AppTextStyles.signsize(color: ColorStyle.gray2),
                     ),
                   ),
                   const Expanded(child: Divider(thickness: 1)),
@@ -147,13 +147,11 @@ class SignInScreen extends StatelessWidget {
                 child: Text.rich(
                   TextSpan(
                     text: "Don't have an account? ",
+                    style: AppTextStyles.signsize(color: ColorStyle.black1),
                     children: [
                       TextSpan(
                         text: 'Sign up',
-                        style: TextStyle(
-                          color: Colors.orange,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: AppTextStyles.signsize(color: ColorStyle.orange),
                         recognizer:
                             TapGestureRecognizer()
                               ..onTap = () {
