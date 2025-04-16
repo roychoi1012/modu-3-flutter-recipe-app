@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:recipe_app/core/routing/router_path.dart';
+import 'package:recipe_app/app/routing/router_path.dart';
 
 void main() {
   runApp(const MyApp());
