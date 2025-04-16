@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_app/data/repository_impl/bookmark_repository_impl.dart';
+import 'package:recipe_app/domain/usecase/get_saved_recipes_usecase_impl.dart';
+import 'package:recipe_app/domain/usecase/unbookmark_recipe_usecase_impl.dart';
 import 'package:recipe_app/presentation/screen/home/home_screen.dart';
 import 'package:recipe_app/presentation/screen/recipe/recipes_screen.dart';
 import 'package:recipe_app/presentation/screen/recipe/saved_recipes_view_model.dart';
@@ -23,13 +26,24 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     selectedIndex = widget.initialTabIndex;
 
+    final recipeDataSource = RecipeDataSourceImpl();
+    final recipeRepository = RecipeRepositoryImpl(recipeDataSource);
+    final getSavedRecipesUseCase = GetSavedRecipesUseCaseImpl(recipeRepository);
+
+    final bookmarkRepository = BookmarkRepositoryImpl(); // 실제 구현체
+    final unbookmarkUseCase = UnbookmarkRecipeUseCaseImpl(bookmarkRepository);
+
     viewModel = SavedRecipesViewModel(
-      RecipeRepositoryImpl(RecipeDataSourceImpl()),
+      getSavedRecipesUseCase,
+      unbookmarkUseCase,
+      bookmarkRepository,
     );
   }
 
   void onTabTapped(int index) {
-    setState(() => selectedIndex = index);
+    setState(() {
+      selectedIndex = index;
+    });
   }
 
   @override

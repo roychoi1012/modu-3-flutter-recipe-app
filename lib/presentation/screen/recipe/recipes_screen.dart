@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:recipe_app/presentation/widget/recipe_card.dart';
-import 'package:recipe_app/presentation/screen/recipe/saved_recipes_view_model.dart';
 import 'package:recipe_app/app/ui/app_text_styles.dart';
+import 'package:recipe_app/presentation/screen/recipe/saved_recipes_view_model.dart';
+import 'package:recipe_app/presentation/widget/recipe_card.dart'; // 카드 위젯
 
 class RecipesScreen extends StatelessWidget {
   final SavedRecipesViewModel viewModel;
+
   const RecipesScreen({super.key, required this.viewModel});
+
+  // ✅ 숫자만 추출하는 헬퍼 함수
+  int _extractMinutes(String time) {
+    final match = RegExp(r'\d+').firstMatch(time);
+    return match != null ? int.parse(match.group(0)!) : 0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +43,21 @@ class RecipesScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 30),
             itemCount: recipes.length,
             itemBuilder: (context, index) {
-              final recipe = recipes[index];
+              final uiModel = recipes[index];
+              final recipe = uiModel.recipe;
+
               return Padding(
-                padding: const EdgeInsets.only(bottom: 20),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: RecipeCard(
                   recipeName: recipe.name,
                   chefName: recipe.chef,
                   recipeImgUrl: recipe.image,
-                  recipeTime: int.tryParse(recipe.time.replaceAll(RegExp(r'[^0-9]'), '')) ?? 20,
-                  recipeRating: recipe.rating ?? 4.0,
+                  recipeTime: _extractMinutes(recipe.time),
+                  recipeRating: recipe.rating,
+                  isBookmarked: uiModel.isBookmarked,
+                  onBookmarkTap: () async {
+                    await viewModel.toggleBookmark(recipe);
+                  },
                 ),
               );
             },

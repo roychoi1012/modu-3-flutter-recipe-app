@@ -1,23 +1,40 @@
 import 'package:flutter/foundation.dart';
-import 'package:recipe_app/domain/repository/recipe_repository.dart';
+import 'package:recipe_app/domain/entity/recipe_model.dart';
+import 'package:recipe_app/domain/usecase/get_saved_recipes_usecase.dart';
+import 'package:recipe_app/domain/usecase/unbookmark_recipe_usecase.dart';
+import 'package:recipe_app/domain/repository/bookmark_repository.dart';
 import 'package:recipe_app/presentation/screen/recipe/recipes_state.dart';
+import 'package:recipe_app/presentation/screen/recipe/recipes_ui_model.dart';
 
 class SavedRecipesViewModel with ChangeNotifier {
-  final RecipeRepository _repository;
+  final GetSavedRecipesUseCase _getSavedRecipesUseCase;
+  final UnbookmarkRecipeUseCase _unbookmarkRecipeUseCase;
+  final BookmarkRepository _bookmarkRepository;
 
   RecipesState _state = const RecipesState(isLoading: true);
   RecipesState get state => _state;
 
-  SavedRecipesViewModel(this._repository) {
+  SavedRecipesViewModel(
+    this._getSavedRecipesUseCase,
+    this._unbookmarkRecipeUseCase,
+    this._bookmarkRepository,
+  ) {
     _loadAllRecipes();
   }
 
   Future<void> _loadAllRecipes() async {
     try {
-      final all = await _repository.getRecipes();
+      final all = await _getSavedRecipesUseCase.execute();
+      final bookmarkedIds = await _bookmarkRepository.getSavedRecipes();
+
+      final uiModels = all.map((recipe) {
+        final isBookmarked = bookmarkedIds.contains(recipe.id);
+        return RecipeUiModel(recipe: recipe, isBookmarked: isBookmarked);
+      }).toList();
+
       _updateState(_state.copyWith(
-        allRecipes: all,
-        filteredRecipes: all,
+        allRecipes: uiModels,
+        filteredRecipes: uiModels,
         isLoading: false,
       ));
     } catch (_) {
@@ -25,9 +42,21 @@ class SavedRecipesViewModel with ChangeNotifier {
     }
   }
 
+  Future<void> toggleBookmark(Recipe recipe) async {
+    final isSaved = await _bookmarkRepository.isSaved(recipe.id);
+
+    if (isSaved) {
+      await _unbookmarkRecipeUseCase.execute(recipe.id);
+    } else {
+      await _bookmarkRepository.saveRecipe(recipe.id);
+    }
+
+    await _loadAllRecipes(); // 상태 다시 로드
+  }
+
   void updateQuery(String query) {
-    final filtered = _state.allRecipes.where((recipe) {
-      return recipe.name.toLowerCase().contains(query.toLowerCase());
+    final filtered = _state.allRecipes.where((uiModel) {
+      return uiModel.recipe.name.toLowerCase().contains(query.toLowerCase());
     }).toList();
 
     _updateState(_state.copyWith(
