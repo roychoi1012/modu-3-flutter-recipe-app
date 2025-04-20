@@ -18,11 +18,16 @@ class SavedRecipesViewModel with ChangeNotifier {
     this._getSavedRecipesUseCase,
     this._unbookmarkRecipeUseCase,
     this._bookmarkRepository,
-  ) {
-    _loadAllRecipes();
+  );
+
+  /// 초기 로딩 함수 (명시적으로 호출)
+  Future<void> init() async {
+    await _loadAllRecipes();
   }
 
   Future<void> _loadAllRecipes() async {
+    _updateState(_state.copyWith(isLoading: true));
+
     try {
       final all = await _getSavedRecipesUseCase.execute();
       final bookmarkedIds = await _bookmarkRepository.getSavedRecipes();
@@ -51,7 +56,8 @@ class SavedRecipesViewModel with ChangeNotifier {
       await _bookmarkRepository.saveRecipe(recipe.id);
     }
 
-    await _loadAllRecipes(); // 상태 다시 로드
+    // 상태 갱신 최소화: 바로 UI 갱신
+    await _loadAllRecipes();
   }
 
   void updateQuery(String query) {
@@ -66,6 +72,7 @@ class SavedRecipesViewModel with ChangeNotifier {
   }
 
   void _updateState(RecipesState newState) {
+    if (_state == newState) return; // 상태가 바뀌지 않았다면 무시
     _state = newState;
     notifyListeners();
   }
