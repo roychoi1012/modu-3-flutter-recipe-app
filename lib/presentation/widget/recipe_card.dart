@@ -9,6 +9,7 @@ class RecipeCard extends StatelessWidget {
   final double recipeRating;
   final bool isBookmarked; // 북마크 상태를 받음
   final VoidCallback onBookmarkTap; // 북마크 아이콘 클릭 이벤트
+  final VoidCallback onTap; // 카드 클릭 이벤트
 
   const RecipeCard({
     super.key,
@@ -18,13 +19,14 @@ class RecipeCard extends StatelessWidget {
     required this.recipeTime,
     required this.recipeRating,
     required this.isBookmarked, // 추가
-    required this.onBookmarkTap, // 추가
+    required this.onBookmarkTap,
+    required this.onTap, // 추가
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return GestureDetector(
+      onTap: onTap, // 카드 클릭 이벤트
       child: Container(
         width: 315,
         height: 150,

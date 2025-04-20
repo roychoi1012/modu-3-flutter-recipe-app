@@ -1,5 +1,7 @@
 // lib/core/router.dart
 import 'package:go_router/go_router.dart';
+import 'package:recipe_app/domain/entity/recipe_model.dart';
+import 'package:recipe_app/presentation/screen/ingredient/ingredient_screen.dart';
 import 'package:recipe_app/presentation/screen/splash/splash_screen.dart';
 import 'package:recipe_app/presentation/screen/signIn/sign_in_screen.dart';
 import 'package:recipe_app/presentation/screen/signUp/sign_up_screen.dart';
@@ -10,6 +12,7 @@ class RouterPath {
   static const String signIn = '/sign-in';
   static const String signUp = '/sign-up';
   static const String main = '/main';
+  static const String ingredient = '/ingredient';
 }
 
 final GoRouter router = GoRouter(
@@ -30,6 +33,13 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RouterPath.main,
       builder: (context, state) => const MainScreen(),
+    ),
+    GoRoute(
+      path: RouterPath.ingredient,
+      builder: (context, state) {
+        final recipe = state.extra as Recipe; 
+        return IngredientScreen(recipe: recipe); 
+      },
     ),
   ],
 );

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:recipe_app/app/routing/router_path.dart';
 import 'package:recipe_app/app/ui/app_text_styles.dart';
 import 'package:recipe_app/presentation/screen/recipe/saved_recipes_view_model.dart';
 import 'package:recipe_app/presentation/widget/recipe_card.dart'; // 카드 위젯
@@ -20,7 +22,7 @@ class RecipesScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Saved Recipes',
+          'Saved recipes',
           style: AppTextStyles.mediumBold(color: Colors.black),
         ),
       ),
@@ -47,7 +49,7 @@ class RecipesScreen extends StatelessWidget {
               final recipe = uiModel.recipe;
 
               return Padding(
-                padding: const EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(bottom: 20),
                 child: RecipeCard(
                   recipeName: recipe.name,
                   chefName: recipe.chef,
@@ -57,6 +59,10 @@ class RecipesScreen extends StatelessWidget {
                   isBookmarked: uiModel.isBookmarked,
                   onBookmarkTap: () async {
                     await viewModel.toggleBookmark(recipe);
+                  },
+                  onTap: () {
+                    print('➡️ 카드 클릭됨: ${recipe.name}');
+                    context.push(RouterPath.ingredient, extra: recipe);
                   },
                 ),
               );
