@@ -32,16 +32,22 @@ class SavedRecipesViewModel with ChangeNotifier {
       final all = await _getSavedRecipesUseCase.execute();
       final bookmarkedIds = await _bookmarkRepository.getSavedRecipes();
 
-      final uiModels = all.map((recipe) {
-        final isBookmarked = bookmarkedIds.contains(recipe.id);
-        return RecipeUiModel(recipe: recipe, isBookmarked: isBookmarked);
-      }).toList();
+      print('✅ 저장된 레시피 수: ${all.length}');
+      print('📌 저장된 북마크 ID: $bookmarkedIds');
 
-      _updateState(_state.copyWith(
-        allRecipes: uiModels,
-        filteredRecipes: uiModels,
-        isLoading: false,
-      ));
+      final uiModels =
+          all.map((recipe) {
+            final isBookmarked = bookmarkedIds.contains(recipe.id);
+            return RecipeUiModel(recipe: recipe, isBookmarked: isBookmarked);
+          }).toList();
+
+      _updateState(
+        _state.copyWith(
+          allRecipes: uiModels,
+          filteredRecipes: uiModels,
+          isLoading: false,
+        ),
+      );
     } catch (_) {
       _updateState(_state.copyWith(isLoading: false));
     }
@@ -61,14 +67,16 @@ class SavedRecipesViewModel with ChangeNotifier {
   }
 
   void updateQuery(String query) {
-    final filtered = _state.allRecipes.where((uiModel) {
-      return uiModel.recipe.name.toLowerCase().contains(query.toLowerCase());
-    }).toList();
+    final filtered =
+        _state.allRecipes.where((uiModel) {
+          return uiModel.recipe.name.toLowerCase().contains(
+            query.toLowerCase(),
+          );
+        }).toList();
 
-    _updateState(_state.copyWith(
-      searchQuery: query,
-      filteredRecipes: filtered,
-    ));
+    _updateState(
+      _state.copyWith(searchQuery: query, filteredRecipes: filtered),
+    );
   }
 
   void _updateState(RecipesState newState) {
