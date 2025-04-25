@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:recipe_app/presentation/widget/recipe_link_dialog.dart';
 import 'package:recipe_app/presentation/widget/score_dialog.dart';
 
 class RecipeActionMenu extends StatelessWidget {
@@ -26,6 +27,20 @@ class RecipeActionMenu extends StatelessWidget {
     );
   }
 
+  // showRecipeLink 생성'
+  void _showRecipeLink(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 32),
+        child: const RecipeLinkDialog(), // 아래 위젯에서 생성
+      ),
+    );
+  }
+
   Future<void> _showActionSheet(BuildContext context) async {
     final result = await showModalActionSheet<String>(
       context: context,
@@ -47,7 +62,7 @@ class RecipeActionMenu extends StatelessWidget {
         _showScoreDialog(context);
         break;
       case 'share':
-        // TODO: 공유 기능 구현
+        _showRecipeLink(context);
         break;
       case 'review':
         // TODO: 리뷰 기능 구현
